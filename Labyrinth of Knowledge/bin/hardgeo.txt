@@ -1,0 +1,25 @@
+Shows the location east or west of the prime meridian.
+Longitude*
+Latitude
+Elevation
+Lithosphere
+The part of Earth that contains water.
+Crust
+Mantle
+Lithosphere
+Hydrosphere*
+Beneath the mantle and is made up of two parts.
+Lithosphere
+Sky
+Core*
+Crust
+Earth's surface is broken into pieces that move.
+Plate tectonics*
+Magma
+Continental drift
+Seafloor spreading
+Hot, fluid rock in the mantle.
+Core
+Water
+Magma*
+Mercury
