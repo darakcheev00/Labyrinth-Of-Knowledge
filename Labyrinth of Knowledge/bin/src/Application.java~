@@ -1,0 +1,213 @@
+import java.awt.FlowLayout;
+import java.awt.Font;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.util.*;
+import java.io.*;
+
+/**
+ * This class is where everything is called. IT keeps track of which classes to show and switches
+ * between panels to show.
+ * 
+ * <h3>Modification</h3>
+ * <p>
+ * <b>May 27, 2017</b> Daniel made Application class use gameSlides.
+ * <p>
+ * <b>June 05, 2017</b> Arsh edited Application class to use playGame class and no gameSlides.
+ * <p>
+ * Authors: Daniel Arakcheev, and Arsh Raza
+ * Date: June 05, 2017
+ * Version: 2.0
+ * */
+public class Application extends JFrame {
+
+  /**File name for highscores.*/
+  static final String FILENAME = "highScores.txt";
+    File scores = new File(System.getProperty("user.home")+FILENAME);
+  /**Keeps track of all the JPanels of different screens.*/
+ Slide[] panes = new Slide [] {new SplashScreen(this),
+       new MainMenu(this),
+       new Instructions(this),
+       new Highscores(this),
+       new PlayGame(this),
+       new PickDifficulty(this),
+   new TreasureSlide(this),
+   new Gameover(this)
+       };
+ /**The current panel index which is showing.*/
+ int currentSlideIndex;
+ /**The difficulty of the game selected.*/
+ int difficulty; 
+ /**Number of lives player has.*/
+ int lives;
+ 
+ /**Start time for game.*/
+ long gameStartTime;
+ /**End time for the game.*/
+ long gameEndTime;
+ /**The amount of total game time.*/
+ long gameTime;
+ /**The name of the player.*/
+ String playerName;
+
+ 
+ /**Reference for the mapPanel in PlayGame.*/
+ JPanel mapPanel;
+ /**Reference to the dunPanel in PlayGame.*/
+ JPanel dunPanel;
+ /**Reference to the question in PlayGame.*/
+ Question question;
+ 
+ 
+  /**List for all the highscores.*/
+ ArrayList<Highscore> highscores;
+ 
+ /**
+  * Class constructor sets up panes and adds it to the frames.
+  * Sets everything to not visible and loads the highscores.
+  * It then calls the splashscreen. For loop is used to add panels to the frame.
+  * 
+  * */
+ public Application (){
+  super("Labyrinth of Knowledge");
+  highscores = new ArrayList<Highscore>();
+  loadHighscores();
+  
+  for (int i = 0; i<panes.length;i++){
+   if(i!=4)
+   this.add(panes[i]);
+   panes[i].setVisible(false);
+  }
+  currentSlideIndex = 0;
+
+
+  this.setSize(1042,690);
+  this.setVisible(true);
+  goToPane(currentSlideIndex);
+ }
+
+ /**
+  * This is used to switch panels.
+  * It sets the current panel to not visible and makes the next one visible.
+  * <h3>Variable Dictionary</h3>
+  * <p>
+  * <b>nextPane</b> a referance to the next panel to be set visible.
+  * <p>
+  * 
+  * */
+ public void goToPane (int nextPaneIndex){
+  Slide nextPane;
+  if(nextPaneIndex==4)
+  {
+    panes[4] = new PlayGame(this);
+    this.add(panes[4]);
+  }
+  panes [currentSlideIndex].setVisible(false);
+  nextPane = panes [nextPaneIndex];
+  nextPane.setVisible(true);
+  nextPane.setSize(1024,650);
+  nextPane.setBounds(0, 0, 1024, 690);
+  nextPane.repaint();
+  nextPane.activate();
+  currentSlideIndex = nextPaneIndex;
+    }
+ 
+
+ /**
+  * This loads the highscores from the highscores file and keeps it in the array.
+  * <h3> Variable dictionary </h3> 
+  * <p>
+  * <b> name</b> reads in a line for the name in highscores file.
+  * <p>
+  * <b> score</b> reads in score in highscores file.
+  * <p>
+  * */
+ public void loadHighscores ()
+    {
+        //LOAD HIGHSCORES FROM FILE
+        /*try
+        {
+            BufferedReader input = new BufferedReader (new FileReader (FILENAME));
+            while (true) {
+    String name = input.readLine();
+    if (name == null)
+     break;
+    String score = input.readLine();
+    if (score == null)
+     break;
+    Highscore highscore = new Highscore(name,Integer.parseInt(score));
+    this.highscores.add(highscore);
+   }
+         }
+        catch (IOException e){}*/
+        
+        
+//  File scores = new File(System.getenv("APPDATA")+FILENAME);
+  
+   Scanner in;
+   try{
+     
+     in = new Scanner(scores);
+     while(true){
+       String name = in.nextLine();
+       if(name ==null)
+         break;
+       int score = in.nextInt();
+       Highscore highscore = new Highscore(name,score);
+       this.highscores.add(highscore);
+     }
+     in.close();
+   }
+     catch(FileNotFoundException e)
+     {
+       
+     }
+  
+  
+ 
+ }
+ 
+ /**
+  * This method saves the highscores to the file.
+  *  <h3> Variable dictionary </h3> 
+  * <p>
+  * <b> output</b> Printwrite for writing to the file..
+  * <p>
+  * */
+ public void saveHighscores() {
+  // SAVES HIGHSCORE BACK INTO FILE
+  /*try {
+   PrintWriter output = new PrintWriter(new FileWriter(FILENAME));
+   for (int i = 0; i < highscores.size(); i++) {
+    Highscore highscore = highscores.get(i);
+    output.println(highscore.name);
+    output.println(highscore.score);
+   }
+   output.close();
+  } catch (IOException e) {
+  }*/
+
+  //new File(scores.getParent()).mkdirs();
+  try{
+    PrintWriter writer = new PrintWriter(scores);
+    for(int i = 0;i<highscores.size();i++)
+    {
+     Highscore highscore = highscores.get(i);
+    writer.println(highscore.name);
+    writer.println(highscore.score);
+    }
+    writer.close();
+  }
+  catch(IOException e)
+  {
+  }
+ }
+ public static void main(String[] args)
+ {
+  Application a = new Application ();
+ }
+ 
+}
