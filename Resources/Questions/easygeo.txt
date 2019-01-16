@@ -1,0 +1,25 @@
+How many continents are there?
+5
+6
+7*
+8
+How many provinces are there in Canada?
+10*
+9
+11
+3
+How many territories are there in Canada?
+4
+6
+10
+3*
+How many lakes are apart of the Great Lakes?
+3
+8
+5*
+250
+Which city is the capital of Canada?
+Toronto
+Vancouver
+Ottawa*
+Canada
